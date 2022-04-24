@@ -33,6 +33,7 @@ public class Program
         {
             while (!token.IsCancellationRequested)
             {
+                Console.WriteLine($"{queue.Count} item(s) in queue");
                 while (!queue.IsEmpty)
                 {
                     Console.WriteLine(queue.TryDequeue(out WriteCommand command)
