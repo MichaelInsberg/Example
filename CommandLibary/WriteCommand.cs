@@ -14,7 +14,7 @@ namespace Example.CommandLibary
         public WriteCommand(Commands laserCommand, byte[] parameter = null)
         {
             Data = BuildSendData(laserCommand, parameter);
-            Parameter = new List<byte>(parameter);
+            Parameter = parameter != null ? new List<byte>(parameter) : new List<byte>();
             LaserCommand = laserCommand;
         }
 

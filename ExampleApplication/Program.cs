@@ -13,27 +13,36 @@ public class Program
 
         var queue = new ConcurrentQueue<WriteCommand>();
         var cancellationTokenSource = new CancellationTokenSource();
+        var token = cancellationTokenSource.Token;
         var tasks = new List<Task>();
 
         var writerTask = Task.Factory.StartNew(() =>
         {
-            queue.Enqueue(new WriteCommand(Commands.SetRs232BaudRate));
-            Console.WriteLine("Enqueue new command");
-            Thread.Sleep(1000);
-        }, cancellationTokenSource.Token);
+            while (!token.IsCancellationRequested)
+            {
+                queue.Enqueue(new WriteCommand(Commands.SetRs232BaudRate));
+                Console.WriteLine("Enqueue new command");
+                Thread.Sleep(1000);
+
+            }
+        }, token);
 
         tasks.Add(writerTask);
 
         var readerTask = Task.Factory.StartNew(() =>
         {
-            while (!queue.IsEmpty)
+            while (!token.IsCancellationRequested)
             {
-                Console.WriteLine(queue.TryDequeue(out WriteCommand command)
-                    ? $"Dequeue command: {command}"
-                    : $"Failed to dequeue command");
+                while (!queue.IsEmpty)
+                {
+                    Console.WriteLine(queue.TryDequeue(out WriteCommand command)
+                        ? $"Dequeue command: {command}"
+                        : $"Failed to dequeue command");
+                }
+
+                Thread.Sleep(100);
             }
-            Thread.Sleep(100);
-        }, cancellationTokenSource.Token);
+        }, token);
 
         tasks.Add(readerTask);
 
