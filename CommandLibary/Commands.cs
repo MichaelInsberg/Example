@@ -1,4 +1,4 @@
-﻿namespace Example.CommandLibary
+﻿namespace Example.CommandLibrary
 {
     /// <summary>
     /// The SPI G4 laser commands.

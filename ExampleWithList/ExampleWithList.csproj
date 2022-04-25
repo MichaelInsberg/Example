@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CommandLibary\CommandLibrary.csproj" />
-	</ItemGroup>
+    <ProjectReference Include="..\CommandLibary\CommandLibrary.csproj" />
+  </ItemGroup>
 
 </Project>

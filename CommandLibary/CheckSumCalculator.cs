@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Example.CommandLibary
+namespace Example.CommandLibrary
 {
     public class CheckSumCalculator
     {

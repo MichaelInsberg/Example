@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Example.CommandLibary
+namespace Example.CommandLibrary
 {
     public class WriteCommand
     {
@@ -21,7 +21,7 @@ namespace Example.CommandLibary
         private List<byte> BuildSendData(Commands command, byte[] paramBytes)
         {
             var parameter = paramBytes ?? Array.Empty<byte>();
-            int numberOfBytes = parameter.Length + Constants.ADD_TO_PARAMETER; // Defined by protocol        
+            int numberOfBytes = parameter.Length + Constants.ADD_TO_PARAMETER; // Defined by protocol
 
             List<byte> sendData = new List<byte>();
 

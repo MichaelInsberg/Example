@@ -1,58 +1,33 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Example.CommandLibary;
+using Example.ExampleApplication;
 
 public class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Start application");
-
-        var queue = new ConcurrentQueue<WriteCommand>();
+        Console.WriteLine("Started application");
+        var workerList = new List<Worker>();
         var cancellationTokenSource = new CancellationTokenSource();
-        var token = cancellationTokenSource.Token;
-        var tasks = new List<Task>();
-
-        var writerTask = Task.Factory.StartNew(() =>
+        Console.WriteLine("Start worker");
+        for (int index = 0; index < 10; index++)
         {
-            while (!token.IsCancellationRequested)
-            {
-                queue.Enqueue(new WriteCommand(Commands.SetRs232BaudRate));
-                Console.WriteLine("Enqueue new command");
-                Thread.Sleep(1000);
-
-            }
-        }, token);
-
-        tasks.Add(writerTask);
-
-        var readerTask = Task.Factory.StartNew(() =>
-        {
-            while (!token.IsCancellationRequested)
-            {
-                Console.WriteLine($"{queue.Count} item(s) in queue");
-                while (!queue.IsEmpty)
-                {
-                    Console.WriteLine(queue.TryDequeue(out WriteCommand command)
-                        ? $"Dequeue command: {command}"
-                        : $"Failed to dequeue command");
-                }
-
-                Thread.Sleep(100);
-            }
-        }, token);
-
-        tasks.Add(readerTask);
+            var worker = new Worker($"Worker nr. {index}");
+            worker.Start(cancellationTokenSource.Token);
+            workerList.Add(worker);
+        }
 
         Console.WriteLine("Press any key to terminate the application");
         Console.ReadLine();
 
         cancellationTokenSource.Cancel();
-
-        Task.WaitAll(tasks.ToArray());
+        Console.WriteLine("Stop worker");
+        foreach (var worker in workerList)
+        {
+            worker.Stop();
+        }
 
         Console.WriteLine("All tasks finished. Application terminated");
     }

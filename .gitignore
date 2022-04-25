@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 /Docs/ExampleApplication.xml
 /Docs/CommandLibary.xml
+/Docs/ExampleWithList.xml
+/Docs/CommandLibrary.xml
+/.idea/.idea.Example/.idea/vcs.xml
